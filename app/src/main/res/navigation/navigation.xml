@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation"
+    app:startDestination="@id/listCookBookFragment">
+
+    <fragment
+        android:id="@+id/listCookBookFragment"
+        android:name="cz.ackee.cookbook.screens.listCookBookFragment.ListCookBookFragment"
+        android:label="listCookBookFragment" >
+        <action
+            android:id="@+id/action_listCookBookFragment_to_addFragmentScreen"
+            app:destination="@id/addFragmentScreen"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_listCookBookFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/addFragmentScreen"
+        android:name="cz.ackee.cookbook.screens.addScreen.AddFragmentScreen"
+        android:label="AddFragmentScreen" >
+        <action
+            android:id="@+id/action_addFragmentScreen_to_listCookBookFragment"
+            app:destination="@id/listCookBookFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_enter_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="cz.ackee.cookbook.screens.detailsScreen.DetailsFragment"
+        android:label="DetailsFragment" >
+        <argument
+            android:name="recipe"
+            app:argType="cz.ackee.cookbook.models.DetailRecipeObject" />
+    </fragment>
+</navigation>
