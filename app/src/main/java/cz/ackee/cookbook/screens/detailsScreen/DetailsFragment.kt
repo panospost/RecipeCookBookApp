@@ -33,7 +33,4 @@ class DetailsFragment: Fragment() {
        binding.detailsModel = detailsViewModel.recipe
         return binding.root
     }
-
-
-
 }

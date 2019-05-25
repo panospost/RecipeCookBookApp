@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import cz.ackee.cookbook.models.DetailRecipeObject
-import cz.ackee.cookbook.network.RecipesApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -28,10 +27,10 @@ class AddFragmentViewModel : ViewModel() {
 
         coroutineScope.launch {
 
-            val call = RecipesApi.retrofitService.postRecipes(
-                   recipeToSend)
+           // val call = RecipesApi.retrofitService.postRecipes(
+           //        recipeToSend)
             try {
-                _requestResult.value = call.await()
+        //        _requestResult.value = call.await()
                 Log.i("response", _requestResult.value)
             }catch (e: Exception){
                 _requestResult.value = "BAD"

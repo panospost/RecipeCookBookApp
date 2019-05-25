@@ -1,23 +1,29 @@
 package cz.ackee.cookbook.screens.listCookBookFragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import cz.ackee.cookbook.R
 import cz.ackee.cookbook.databinding.LayoutListCookBookFragmentBinding
+import cz.ackee.cookbook.localDatabase.GetAllRecipesDao
+import cz.ackee.cookbook.localDatabase.RecipesLocalDatabase
+import cz.ackee.cookbook.localDatabase.Repository
+import cz.ackee.cookbook.network.NetworkRecipeDataSource
+import cz.ackee.cookbook.network.RecipesApiService
 
 class ListCookBookFragment : Fragment() {
 
     lateinit var viewModel: ListCookBookViewModel
+    lateinit var recipesApiService: RecipesApiService
+    lateinit var networkRecipeDataSource: NetworkRecipeDataSource
+
+    lateinit var repository: Repository
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -25,12 +31,22 @@ class ListCookBookFragment : Fragment() {
         val binding: LayoutListCookBookFragmentBinding = DataBindingUtil.inflate(
                 inflater, R.layout.layout_list_cook_book_fragment, container, false)
 
-        viewModel = ViewModelProviders.of(this).get(ListCookBookViewModel::class.java)
+        val database = RecipesLocalDatabase
+        recipesApiService =  RecipesApiService(activity!!.applicationContext)
+         networkRecipeDataSource = NetworkRecipeDataSource(recipesApiService)
+        repository = Repository(networkRecipeDataSource, database.getInstance(activity!!.applicationContext).getAllRecipesDao)
+
+
+        val viewModelFactory = ListCookViewModelFactory(repository)
+
+        viewModel =
+                ViewModelProviders.of(
+                        this, viewModelFactory).get(ListCookBookViewModel::class.java)
 
         binding.lifecycleOwner = this
 
         val adapter = ListAdapterCookBook(ItemListListener {recipeId->
-               viewModel.getTheRecipeDetails(recipeId)
+             //  viewModel.getTheRecipeDetails(recipeId)
         })
 
         binding.recipesList.adapter = adapter
@@ -48,7 +64,7 @@ class ListCookBookFragment : Fragment() {
                         .actionListCookBookFragmentToDetailsFragment(viewModel.recipeRequested))
 
             }
-         //   viewModel.clearIsInitialised()
+         //  viewModel.clearIsInitialised()
 
 
         })
