@@ -46,7 +46,7 @@ class ListCookBookFragment : Fragment() {
         binding.lifecycleOwner = this
 
         val adapter = ListAdapterCookBook(ItemListListener {recipeId->
-             //  viewModel.getTheRecipeDetails(recipeId)
+               viewModel.getTheRecipeDetails(recipeId)
         })
 
         binding.recipesList.adapter = adapter
@@ -62,10 +62,10 @@ class ListCookBookFragment : Fragment() {
         viewModel.isInitialised.observe(this, Observer {isInitialised->
             if(isInitialised){
               this.findNavController().navigate(ListCookBookFragmentDirections
-                        .actionListCookBookFragmentToDetailsFragment(viewModel.recipeRequested))
+                        .actionListCookBookFragmentToDetailsFragment(viewModel.getSpecificRecipe()))
 
+                viewModel.clearIsInitialised()
             }
-         //  viewModel.clearIsInitialised()
 
 
         })

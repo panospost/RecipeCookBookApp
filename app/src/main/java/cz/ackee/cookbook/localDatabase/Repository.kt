@@ -2,6 +2,7 @@ package cz.ackee.cookbook.localDatabase
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import cz.ackee.cookbook.models.DetailRecipeObject
 import cz.ackee.cookbook.models.RecipesObject
 import cz.ackee.cookbook.network.NetworkRecipeDataSource
 import cz.ackee.cookbook.network.NoConnectivityException
@@ -21,7 +22,16 @@ class Repository(var networkDataSource: NetworkRecipeDataSource,
     val responseList: LiveData<List<RecipesObject>>
         get() = _responseList
 
+    // The internal MutableLiveData String that stores the status of the most recent request
+    private val _isInitialised = MutableLiveData<Boolean>()
+    // The external immutable LiveData for the request status String
+    val isInitialised: LiveData<Boolean>
+        get() = _isInitialised
+
+    lateinit var recipeRequested: DetailRecipeObject
+
     init {
+        _isInitialised.value = false
         try {
             coroutineScope.launch {
                 getCurrentRecipes()
@@ -60,5 +70,21 @@ class Repository(var networkDataSource: NetworkRecipeDataSource,
 
     }
 
+    fun getTheRecipeDetails(recipeId: String) {
+        coroutineScope.launch {
+            try {
 
+                    recipeRequested = networkDataSource.getRecipeDetails(recipeId)
+                    _isInitialised.value = true
+
+
+            }catch (e: NoConnectivityException){
+                Log.i("333Error", e.message)
+
+            }
+        }
+    }
+    fun clearIsInitialised(){
+        _isInitialised.value = false
+    }
 }

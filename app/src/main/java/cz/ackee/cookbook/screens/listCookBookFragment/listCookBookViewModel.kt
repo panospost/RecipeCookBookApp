@@ -26,11 +26,17 @@ class ListCookBookViewModel(val repository: Repository) : ViewModel() {
     val isInitialised: LiveData<Boolean>
         get() = _isInitialised
 
-    lateinit var recipeRequested: DetailRecipeObject
 
     init {
           repository.responseList.observeForever {
            _responseList.value = it
+        }
+
+        repository.isInitialised.observeForever {
+            if(it){
+                _isInitialised.value = it
+            }
+
         }
     }
 
@@ -40,26 +46,19 @@ class ListCookBookViewModel(val repository: Repository) : ViewModel() {
     }
 
 
-    //     fun getTheRecipeDetails(recipeId: String) {
-//        coroutineScope.launch {
-//
-//            try {
-//                recipeRequested = netWorkRecipes.getRecipeDetails(recipeId)
-//                _isInitialised.value = true
-//
-//            }catch (e: NoConnectivityException){
-//                Log.i("333Error", e.message)
-//
-//            }
-//        }
-//    }
-//    fun clearIsInitialised(){
-////        _isInitialised.value = false
-//    }
-//
-//
-    override fun onCleared() {
-        super.onCleared()
-       // repository.responseList.removeObservers(this)
+    fun getTheRecipeDetails(recipeId: String) {
+             repository.getTheRecipeDetails(recipeId)
     }
+
+    fun getSpecificRecipe(): DetailRecipeObject{
+        return repository.recipeRequested
+    }
+
+    fun clearIsInitialised() {
+        _isInitialised.value = false
+        repository.clearIsInitialised()
+
+    }
+
+
 }
