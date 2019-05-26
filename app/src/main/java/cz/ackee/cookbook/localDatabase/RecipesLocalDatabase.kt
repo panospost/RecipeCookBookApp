@@ -4,8 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import cz.ackee.cookbook.models.RecipesObject
 
-@Database(entities = [RecipeEntity::class], version=1, exportSchema = false)
+@Database(entities = [RecipesObject::class], version=3, exportSchema = false)
 abstract class RecipesLocalDatabase: RoomDatabase(){
     abstract val getAllRecipesDao: GetAllRecipesDao
 
@@ -21,7 +22,7 @@ abstract class RecipesLocalDatabase: RoomDatabase(){
                     instance = Room.databaseBuilder(
                             context.applicationContext,
                             RecipesLocalDatabase::class.java,
-                            "recipes_local_database"
+                            "recipes_local_database_version"
                     ).fallbackToDestructiveMigration()
                             .build()
                     INSTANCE = instance

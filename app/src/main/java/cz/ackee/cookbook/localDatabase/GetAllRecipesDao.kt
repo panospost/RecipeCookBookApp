@@ -2,29 +2,31 @@ package cz.ackee.cookbook.localDatabase
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import cz.ackee.cookbook.models.RecipesObject
 
 @Dao
 interface GetAllRecipesDao{
 
     @Insert
-    fun insert(recipe: RecipeEntity)
+    fun insert(recipe: RecipesObject)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(recipies: List<RecipeEntity>)
+    fun insertAll(recipies: List<RecipesObject>)
+
+    @Transaction
+    fun insertAllversion2(recipies: List<RecipesObject>) =recipies.forEach {insert(it)}
 
     @Update
-    fun update(recipe: RecipeEntity)
+    fun update(recipe: RecipesObject)
 
-    @Query(value = "SELECT * FROM  local_recipes_database WHERE id=:key")
-    fun getSpecificRecipe(key: String): RecipeEntity
+    @Query(value = "SELECT * FROM  recipes_local_database_version WHERE id=:key")
+    fun getSpecificRecipe(key: String): RecipesObject
 
-    @Query(value = "SELECT * FROM  local_recipes_database WHERE id=:key")
-    fun getNightWithId(key: String): LiveData<RecipeEntity>
 
-    @Query(value = "DELETE from local_recipes_database")
+    @Query(value = "DELETE from recipes_local_database_version")
     fun clear()
 
-    @Query("SELECT * FROM local_recipes_database ORDER BY id DESC")
-    fun getAllRecipes(): LiveData<List<RecipeEntity>>
+    @Query("SELECT * FROM recipes_local_database_version")
+    fun getAllRecipes(): LiveData<List<RecipesObject>>
 
 }

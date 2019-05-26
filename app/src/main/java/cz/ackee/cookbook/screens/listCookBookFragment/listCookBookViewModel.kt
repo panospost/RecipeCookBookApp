@@ -3,22 +3,14 @@ package cz.ackee.cookbook.screens.listCookBookFragment
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import cz.ackee.cookbook.localDatabase.Repository
 import cz.ackee.cookbook.models.DetailRecipeObject
 import cz.ackee.cookbook.models.RecipesObject
-import cz.ackee.cookbook.network.NoConnectivityException
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-
-class ListCookBookViewModel(val repository: Repository): ViewModel(){
 
 
-
-    private var viewModelJob = Job()
-    private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main )
+class ListCookBookViewModel(val repository: Repository) : ViewModel() {
 
 
     // The internal MutableLiveData String that stores the status of the most recent request
@@ -37,18 +29,18 @@ class ListCookBookViewModel(val repository: Repository): ViewModel(){
     lateinit var recipeRequested: DetailRecipeObject
 
     init {
-           try {
-               coroutineScope.launch {
-                   _responseList.value = repository.getCurrentRecipes()
-               }
-           }catch (e: NoConnectivityException){
-               Log.i("2143NoConnection", "no internet get local data")
-           }
+          repository.responseList.observeForever {
+           _responseList.value = it
+        }
+    }
+
+    fun saveRecipes(recipes: List<RecipesObject>) {
+        repository.cacheRecipes(recipes)
+
     }
 
 
-
-//     fun getTheRecipeDetails(recipeId: String) {
+    //     fun getTheRecipeDetails(recipeId: String) {
 //        coroutineScope.launch {
 //
 //            try {
@@ -68,6 +60,6 @@ class ListCookBookViewModel(val repository: Repository): ViewModel(){
 //
     override fun onCleared() {
         super.onCleared()
-        viewModelJob.cancel()
+       // repository.responseList.removeObservers(this)
     }
 }

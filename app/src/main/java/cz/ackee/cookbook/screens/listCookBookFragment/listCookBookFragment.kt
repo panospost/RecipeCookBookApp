@@ -55,6 +55,7 @@ class ListCookBookFragment : Fragment() {
             it->
             it?.let {
                 adapter.submitList(it)
+                viewModel.saveRecipes(it)
             }
         })
 
