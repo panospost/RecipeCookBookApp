@@ -6,6 +6,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class DetailRecipeObject(
+        var id: String?,
         var name: String,
         var duration: Int,
         var description: String,

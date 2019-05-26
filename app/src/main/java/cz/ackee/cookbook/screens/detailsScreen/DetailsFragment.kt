@@ -13,10 +13,18 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import cz.ackee.cookbook.R
 import cz.ackee.cookbook.databinding.DetailsFragmentLayoutBinding
+import cz.ackee.cookbook.localDatabase.RecipesLocalDatabase
+import cz.ackee.cookbook.localDatabase.Repository
+import cz.ackee.cookbook.network.NetworkRecipeDataSource
+import cz.ackee.cookbook.network.RecipesApiService
 
 
 class DetailsFragment: Fragment() {
    lateinit var binding: DetailsFragmentLayoutBinding
+    lateinit var recipesApiService: RecipesApiService
+    lateinit var networkRecipeDataSource: NetworkRecipeDataSource
+    lateinit var detailsViewModel: DetailsViewModel
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         // Get a reference to the binding object and inflate the fragment views.
@@ -24,11 +32,17 @@ class DetailsFragment: Fragment() {
                 inflater, R.layout.details_fragment_layout, container, false)
         binding.lifecycleOwner = this
 
+        val database = RecipesLocalDatabase
+        recipesApiService = RecipesApiService(activity!!.applicationContext)
+        networkRecipeDataSource = NetworkRecipeDataSource(recipesApiService)
+        val repository = Repository(networkRecipeDataSource, database.getInstance(activity!!.applicationContext).getAllRecipesDao)
+
+
         val recipeIdarg = DetailsFragmentArgs.fromBundle(arguments!!)
 
-        val viewModelFactory = DetailsViewModelFactory(recipeIdarg.recipe)
+        val viewModelFactory = DetailsViewModelFactory(recipeIdarg.recipe, repository)
 
-        val detailsViewModel =
+         detailsViewModel =
                 ViewModelProviders.of(
                         this, viewModelFactory).get(DetailsViewModel::class.java)
          binding.viewModel = detailsViewModel
@@ -77,7 +91,7 @@ class DetailsFragment: Fragment() {
         }
     }
 
-    private fun rateTheRecipe(starRated: Int?) {
+    private fun rateTheRecipe(starRated: Int) {
         when(starRated){
             1->{
                 binding.imageView21.alpha = 1.0f
@@ -111,6 +125,8 @@ class DetailsFragment: Fragment() {
         binding.imageView23.isClickable = false
         binding.imageView24.isClickable = false
         binding.imageView25.isClickable = false
+        detailsViewModel.recipe.score = starRated
+        detailsViewModel.sendRating()
 
     }
 

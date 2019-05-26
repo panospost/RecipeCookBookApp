@@ -9,6 +9,9 @@ import cz.ackee.cookbook.network.NoConnectivityException
 import kotlinx.coroutines.*
 import java.lang.Exception
 import java.lang.NullPointerException
+import org.json.JSONObject
+
+
 
 class Repository(var networkDataSource: NetworkRecipeDataSource,
                  var getAllRecipesDao: GetAllRecipesDao) {
@@ -86,5 +89,18 @@ class Repository(var networkDataSource: NetworkRecipeDataSource,
     }
     fun clearIsInitialised(){
         _isInitialised.value = false
+    }
+
+    fun sendNewRating(recipe: DetailRecipeObject) {
+        try {
+            GlobalScope.launch {
+                withContext(Dispatchers.IO){
+                    networkDataSource.updateRecipe(recipe)
+                }
+            }
+        }catch (e: Exception){
+            Log.i("TAG", e.toString())
+        }
+
     }
 }

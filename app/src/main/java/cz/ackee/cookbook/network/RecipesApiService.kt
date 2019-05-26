@@ -11,7 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
 import okhttp3.OkHttpClient
-
+import retrofit2.Call
 
 
 private const val BASE_URL = "https://cookbook.ack.ee/api/v1/"
@@ -31,6 +31,10 @@ interface RecipesApiService {
     @GET("recipes/{recipeId}")
     fun getOneRecipe(@Path("recipeId") id: String):
             Deferred<DetailRecipeObject>
+
+    @PUT("recipes/{recipeId}")
+    fun updateRecipe(@Path("recipeId") id: String, @Body recipesObject: DetailRecipeObject)
+    : Call<Int>
 
     companion object {
         operator fun invoke(

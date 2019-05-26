@@ -13,7 +13,7 @@ import java.lang.Exception
 
 class AddFragmentViewModel : ViewModel() {
 
-    var recipeToSend = DetailRecipeObject("Ackee", 0, "cwe", "wefdw", mutableListOf("ackee", "something"), 0)
+    var recipeToSend = DetailRecipeObject("ςεδες","Ackee", 0, "cwe", "wefdw", mutableListOf("ackee", "something"), 0)
 
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)

@@ -5,10 +5,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import cz.ackee.cookbook.localDatabase.Repository
 import cz.ackee.cookbook.models.DetailRecipeObject
 
 
-class DetailsViewModel(val recipe: DetailRecipeObject): ViewModel(){
+class DetailsViewModel(val recipe: DetailRecipeObject, val repository: Repository): ViewModel(){
     private val _starRated = MutableLiveData<Int>()
     val starsRated: LiveData<Int>
         get() = _starRated
@@ -27,6 +28,10 @@ class DetailsViewModel(val recipe: DetailRecipeObject): ViewModel(){
     }
     fun rateThis1star(){
         _starRated.value = 1
+    }
+
+    fun sendRating() {
+        repository.sendNewRating(recipe)
     }
 
 }

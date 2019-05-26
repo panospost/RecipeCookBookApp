@@ -31,7 +31,7 @@ class ListCookBookFragment : Fragment() {
         val binding: LayoutListCookBookFragmentBinding = DataBindingUtil.inflate(
                 inflater, R.layout.layout_list_cook_book_fragment, container, false)
 
-        val database = RecipesLocalDatabase
+               val database = RecipesLocalDatabase
         recipesApiService = RecipesApiService(activity!!.applicationContext)
         networkRecipeDataSource = NetworkRecipeDataSource(recipesApiService)
         repository = Repository(networkRecipeDataSource, database.getInstance(activity!!.applicationContext).getAllRecipesDao)
