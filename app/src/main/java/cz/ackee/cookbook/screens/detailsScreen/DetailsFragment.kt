@@ -1,9 +1,7 @@
 package cz.ackee.cookbook.screens.detailsScreen
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -19,7 +17,6 @@ class DetailsFragment: Fragment() {
         val binding: DetailsFragmentLayoutBinding = DataBindingUtil.inflate(
                 inflater, R.layout.details_fragment_layout, container, false)
         binding.lifecycleOwner = this
-
         val recipeIdarg = DetailsFragmentArgs.fromBundle(arguments!!)
 
         val viewModelFactory = DetailsViewModelFactory(recipeIdarg.recipe)
@@ -33,4 +30,7 @@ class DetailsFragment: Fragment() {
        binding.detailsModel = detailsViewModel.recipe
         return binding.root
     }
+
+
+
 }

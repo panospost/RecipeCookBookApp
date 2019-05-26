@@ -32,8 +32,8 @@ class ListCookBookFragment : Fragment() {
                 inflater, R.layout.layout_list_cook_book_fragment, container, false)
 
         val database = RecipesLocalDatabase
-        recipesApiService =  RecipesApiService(activity!!.applicationContext)
-         networkRecipeDataSource = NetworkRecipeDataSource(recipesApiService)
+        recipesApiService = RecipesApiService(activity!!.applicationContext)
+        networkRecipeDataSource = NetworkRecipeDataSource(recipesApiService)
         repository = Repository(networkRecipeDataSource, database.getInstance(activity!!.applicationContext).getAllRecipesDao)
 
 
@@ -45,23 +45,22 @@ class ListCookBookFragment : Fragment() {
 
         binding.lifecycleOwner = this
 
-        val adapter = ListAdapterCookBook(ItemListListener {recipeId->
-               viewModel.getTheRecipeDetails(recipeId)
+        val adapter = ListAdapterCookBook(ItemListListener { recipeId ->
+            viewModel.getTheRecipeDetails(recipeId)
         })
 
         binding.recipesList.adapter = adapter
         binding.recipesList.addItemDecoration(DividerItemDecoration(activity, LinearLayoutManager.VERTICAL))
-        viewModel.responseList.observe(viewLifecycleOwner, Observer {
-            it->
+        viewModel.responseList.observe(viewLifecycleOwner, Observer { it ->
             it?.let {
                 adapter.submitList(it)
                 viewModel.saveRecipes(it)
             }
         })
 
-        viewModel.isInitialised.observe(this, Observer {isInitialised->
-            if(isInitialised){
-              this.findNavController().navigate(ListCookBookFragmentDirections
+        viewModel.isInitialised.observe(this, Observer { isInitialised ->
+            if (isInitialised) {
+                this.findNavController().navigate(ListCookBookFragmentDirections
                         .actionListCookBookFragmentToDetailsFragment(viewModel.getSpecificRecipe()))
 
                 viewModel.clearIsInitialised()

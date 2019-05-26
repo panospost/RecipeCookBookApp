@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/listCookBookFragment"
         android:name="cz.ackee.cookbook.screens.listCookBookFragment.ListCookBookFragment"
-        android:label="listCookBookFragment" >
+        android:label="Recipes">
         <action
             android:id="@+id/action_listCookBookFragment_to_addFragmentScreen"
             app:destination="@id/addFragmentScreen"
@@ -27,7 +27,7 @@
     <fragment
         android:id="@+id/addFragmentScreen"
         android:name="cz.ackee.cookbook.screens.addScreen.AddFragmentScreen"
-        android:label="AddFragmentScreen" >
+        android:label="Add a recipe">
         <action
             android:id="@+id/action_addFragmentScreen_to_listCookBookFragment"
             app:destination="@id/listCookBookFragment"
@@ -39,7 +39,7 @@
     <fragment
         android:id="@+id/detailsFragment"
         android:name="cz.ackee.cookbook.screens.detailsScreen.DetailsFragment"
-        android:label="DetailsFragment" >
+        android:label="Recipe">
         <argument
             android:name="recipe"
             app:argType="cz.ackee.cookbook.models.DetailRecipeObject" />

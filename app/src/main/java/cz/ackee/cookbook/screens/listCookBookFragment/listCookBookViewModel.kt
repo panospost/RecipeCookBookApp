@@ -1,9 +1,7 @@
 package cz.ackee.cookbook.screens.listCookBookFragment
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import cz.ackee.cookbook.localDatabase.Repository
 import cz.ackee.cookbook.models.DetailRecipeObject
@@ -28,12 +26,12 @@ class ListCookBookViewModel(val repository: Repository) : ViewModel() {
 
 
     init {
-          repository.responseList.observeForever {
-           _responseList.value = it
+        repository.responseList.observeForever {
+            _responseList.value = it
         }
 
         repository.isInitialised.observeForever {
-            if(it){
+            if (it) {
                 _isInitialised.value = it
             }
 
@@ -47,10 +45,10 @@ class ListCookBookViewModel(val repository: Repository) : ViewModel() {
 
 
     fun getTheRecipeDetails(recipeId: String) {
-             repository.getTheRecipeDetails(recipeId)
+        repository.getTheRecipeDetails(recipeId)
     }
 
-    fun getSpecificRecipe(): DetailRecipeObject{
+    fun getSpecificRecipe(): DetailRecipeObject {
         return repository.recipeRequested
     }
 
