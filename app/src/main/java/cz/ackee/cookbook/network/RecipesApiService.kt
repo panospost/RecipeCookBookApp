@@ -1,5 +1,6 @@
 package cz.ackee.cookbook.network
 
+import android.content.Context
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -9,26 +10,14 @@ import kotlinx.coroutines.Deferred
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
+import okhttp3.OkHttpClient
+import retrofit2.Call
+
 
 private const val BASE_URL = "https://cookbook.ack.ee/api/v1/"
-enum class RecipeApiFilter(val value: String) { SHOW_ALL("rent"), ADD_RECIPE("buy") }
 
-/**
- * Build the Moshi object that Retrofit will be using,
- */
-private val moshi = Moshi.Builder()
-        .add(KotlinJsonAdapterFactory())
-        .build()
 
-/**
- * Use the Retrofit builder to build a retrofit object using a Moshi converter with our Moshi
- * object.
- */
-private val retrofit = Retrofit.Builder()
-        .addConverterFactory(MoshiConverterFactory.create(moshi))
-        .addCallAdapterFactory(CoroutineCallAdapterFactory())
-        .baseUrl(BASE_URL)
-        .build()
+
 
 
 interface RecipesApiService {
@@ -40,13 +29,46 @@ interface RecipesApiService {
     fun postRecipes(@Body recipesObject: DetailRecipeObject): Deferred<String>
 
     @GET("recipes/{recipeId}")
-    fun getOneRecipe(@Path("recipeId")  id: String):
+    fun getOneRecipe(@Path("recipeId") id: String):
             Deferred<DetailRecipeObject>
+
+    @PUT("recipes/{recipeId}")
+    fun updateRecipe(@Path("recipeId") id: String, @Body recipesObject: DetailRecipeObject)
+    : Call<Int>
+
+    companion object {
+        operator fun invoke(
+                context: Context
+        ): RecipesApiService {
+            /**
+             * Build the Moshi object that Retrofit will be using,
+             */
+            val moshi = Moshi.Builder()
+                    .add(KotlinJsonAdapterFactory())
+                    .build()
+
+            val client = OkHttpClient.Builder()
+                    .addInterceptor(ConnectivityInterceptor(context))
+                    .build()
+
+            /**
+             * Use the Retrofit builder to build a retrofit object using a Moshi converter with our Moshi
+             * object.
+             */
+            return  Retrofit.Builder()
+                    .client(client)
+                    .addConverterFactory(MoshiConverterFactory.create(moshi))
+                    .addCallAdapterFactory(CoroutineCallAdapterFactory())
+                    .baseUrl(BASE_URL)
+                    .build()
+                    .create(RecipesApiService::class.java)
+        }
+    }
 }
 
-/**
- * A public Api object that exposes the lazy-initialized Retrofit service
- */
-object RecipesApi {
-    val retrofitService : RecipesApiService by lazy { retrofit.create(RecipesApiService::class.java) }
-}
+///**
+// * A public Api object that exposes the lazy-initialized Retrofit service
+// */
+//object RecipesApi {
+//    val retrofitService : RecipesApiService by lazy { retrofit.create(RecipesApiService::class.java) }
+//}

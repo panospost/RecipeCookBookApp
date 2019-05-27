@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="cz.ackee.cookbook.screens.detailsScreen.DetailsViewModel" />
+
         <variable
             name="detailsModel"
             type="cz.ackee.cookbook.models.DetailRecipeObject" />
@@ -60,11 +62,12 @@
                     app:layout_constraintVertical_bias="0.825"
                     tools:text="dververve" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:background="@color/colorAccent"
+                    android:gravity="center_horizontal|center_vertical"
                     android:minHeight="50dp"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="@+id/materialCardView"
@@ -73,103 +76,190 @@
                     tools:layout_editor_absoluteX="85dp">
 
                     <ImageView
+                        android:alpha="0.1"
                         android:id="@+id/imageView11"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="175dp"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginStart="30dp"
                         android:contentDescription="@string/star"
-                        android:src="@drawable/ic_star_white"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/textView3"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:src="@drawable/ic_star_white" />
 
                     <ImageView
+                        android:alpha="0.1"
                         android:id="@+id/imageView12"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="72dp"
-                        android:layout_marginBottom="8dp"
                         android:contentDescription="@string/star"
-                        android:src="@drawable/ic_star_white"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/textView3"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:src="@drawable/ic_star_white" />
 
                     <ImageView
+                        android:alpha="0.1"
                         android:id="@+id/imageView13"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="96dp"
-                        android:layout_marginBottom="8dp"
                         android:contentDescription="@string/star"
-                        android:src="@drawable/ic_star_white"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/textView3"
-                        app:layout_constraintHorizontal_bias="0.937"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:src="@drawable/ic_star_white" />
 
                     <ImageView
+                        android:alpha="0.1"
                         android:id="@+id/imageView14"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
                         android:contentDescription="@string/star"
-                        android:src="@drawable/ic_star_white"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/textView3"
-                        app:layout_constraintHorizontal_bias="0.255"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:src="@drawable/ic_star_white" />
 
                     <ImageView
+                        android:alpha="0.1"
                         android:id="@+id/imageView15"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="120dp"
-                        android:layout_marginBottom="8dp"
                         android:contentDescription="@string/star"
-                        android:src="@drawable/ic_star_white"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/textView3"
-                        app:layout_constraintHorizontal_bias="0.854"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:src="@drawable/ic_star_white" />
+
+                    <TextView
+                        android:id="@+id/ictime"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/ic_time" />
 
                     <TextView
                         android:id="@+id/textView3"
-                        android:layout_width="wrap_content"
+                        android:layout_width="70dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="24dp"
-                        android:layout_marginBottom="8dp"
-                        android:gravity="end"
-                        android:text="60 min"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.533" />
+                        android:layout_marginEnd="20dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimaryDark"
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        app:intDurationToStringConvert="@{detailsModel}" />
+
+                </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/textView"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:layout_marginStart="20dp"
+                android:text="@{detailsModel.info}"
+                tools:text="fqwerfwregwrgwwww
+                \nfwefwefwefwefwefwefwef
+                \nfwefwefwefwefewfwefwe" />
+
+            <TextView
+                android:id="@+id/ingrediencelabel"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/ingredients"
+                android:textColor="@color/design_default_color_primary_dark"
+                android:textSize="20sp"
+                tools:text="Ingredience" />
+
+            <LinearLayout
+                android:id="@+id/ingredientsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/privadlaJidlaLbl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/privJidla"
+                android:textColor="@color/design_default_color_primary_dark"
+                android:textSize="20sp"
+                tools:text="@string/privJidla" />
+
+            <TextView
+                android:id="@+id/description"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="@{detailsModel.description}"
+                tools:text="fqwerfwregwrgwwww
+                \nfwefwefwefwefwefwefwef
+                \nfwefwefwefwefewfwefwe" />
+
+            <TextView
+                android:id="@+id/textAboveScore"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/design_default_color_primary_dark"
+                android:paddingTop="10dp"
+                android:text="@string/ohodnot_tento_recept"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:id="@+id/user_rating_stars"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_gravity="bottom"
+                android:background="@color/design_default_color_primary_dark"
+                android:gravity="center_horizontal|center_vertical"
+                android:minHeight="50dp"
+                android:orientation="horizontal"
+                android:paddingBottom="40dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <ImageView
+                    android:id="@+id/imageView21"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.1"
+                    android:contentDescription="@string/star"
+                    android:onClick="@{()-> viewModel.rateThis1star()}"
+                    android:src="@drawable/ic_star_bigger" />
+
+                <ImageView
+                    android:id="@+id/imageView22"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.1"
+                    android:contentDescription="@string/star"
+                    android:onClick="@{()-> viewModel.rateThis2star()}"
+                    android:src="@drawable/ic_star_bigger" />
+
+                <ImageView
+                    android:id="@+id/imageView23"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.1"
+                    android:contentDescription="@string/star"
+                    android:onClick="@{()-> viewModel.rateThis3star()}"
+                    android:src="@drawable/ic_star_bigger" />
+
+                <ImageView
+                    android:id="@+id/imageView24"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.1"
+                    android:contentDescription="@string/star"
+                    android:onClick="@{()-> viewModel.rateThis4star()}"
+                    android:src="@drawable/ic_star_bigger" />
+
+                <ImageView
+                    android:id="@+id/imageView25"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.1"
+                    android:contentDescription="@string/star"
+                    android:onClick="@{()-> viewModel.rateThis5star()}"
+                    android:src="@drawable/ic_star_bigger" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

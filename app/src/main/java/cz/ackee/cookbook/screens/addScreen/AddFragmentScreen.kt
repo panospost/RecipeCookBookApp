@@ -24,6 +24,7 @@ class AddFragmentScreen: Fragment() {
         // Get a reference to the binding object and inflate the fragment views.
          binding = DataBindingUtil.inflate(
                 inflater, R.layout.add_fragment_layout, container, false)
+        activity?.actionBar?.setDisplayShowHomeEnabled(true)
 
          viewModel =  ViewModelProviders.of(this).get(AddFragmentViewModel::class.java)
         binding.viewmodel = viewModel
