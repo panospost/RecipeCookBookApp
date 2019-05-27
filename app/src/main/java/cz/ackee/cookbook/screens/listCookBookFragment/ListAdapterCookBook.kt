@@ -3,13 +3,14 @@ package cz.ackee.cookbook.screens.listCookBookFragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import cz.ackee.cookbook.databinding.LayoutItemOfListCookBookBinding
 import cz.ackee.cookbook.models.RecipesObject
 
-class ListAdapterCookBook( val clickListener: ItemListListener) : ListAdapter<RecipesObject, ListAdapterCookBook.ViewHolder>(RecipesDiffUtill()) {
+class ListAdapterCookBook( val clickListener: ItemListListener) : PagedListAdapter<RecipesObject, ListAdapterCookBook.ViewHolder>(RecipesDiffUtill()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }

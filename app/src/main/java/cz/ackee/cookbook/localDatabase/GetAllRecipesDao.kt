@@ -1,6 +1,6 @@
 package cz.ackee.cookbook.localDatabase
 
-import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.room.*
 import cz.ackee.cookbook.models.RecipesObject
 
@@ -13,9 +13,6 @@ interface GetAllRecipesDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(recipies: List<RecipesObject>)
 
-    @Transaction
-    fun insertAllversion2(recipies: List<RecipesObject>) =recipies.forEach {insert(it)}
-
     @Update
     fun update(recipe: RecipesObject)
 
@@ -27,6 +24,6 @@ interface GetAllRecipesDao{
     fun clear()
 
     @Query("SELECT * FROM recipes_local_database_version")
-    fun getAllRecipes(): LiveData<List<RecipesObject>>
+    fun getAllRecipes(): DataSource.Factory<Int, RecipesObject>
 
 }

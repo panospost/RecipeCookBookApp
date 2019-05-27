@@ -1,28 +1,46 @@
 package cz.ackee.cookbook.network
 
 
+
 import android.util.Log
-import com.squareup.moshi.JsonDataException
 import cz.ackee.cookbook.models.DetailRecipeObject
-import cz.ackee.cookbook.models.RecipesObject
+import retrofit2.Call
+import retrofit2.Response
+import javax.security.auth.callback.Callback
+
 
 class NetworkRecipeDataSource(var recipesApiService: RecipesApiService) {
 
-
-
-    suspend fun getAllRecipes(): List<RecipesObject> {
-            val deferredRecipes = recipesApiService.getAllRecipes()
-            deferredRecipes.await()
-        return  deferredRecipes.await()
-    }
 
     suspend fun getRecipeDetails(recipeId: String): DetailRecipeObject {
        return  recipesApiService.getOneRecipe(recipeId).await()
     }
 
-     suspend fun updateRecipe(recipe: DetailRecipeObject) {
-            var x =recipesApiService.updateRecipe(recipe.id!!, recipe)
-         Log.i("tag", x.toString())
+      fun updateScore(recipe: DetailRecipeObject) {
+
+            val x =recipesApiService.updateScoreRecipe(recipe.id!!, recipe.score).enqueue(object :  retrofit2.Callback<Int> {
+                override fun onFailure(call: Call<Int>, t: Throwable) {
+                    Log.i("recipeUpdError", "recipe is not updated")
+                }
+
+                override fun onResponse(call: Call<Int>, response: Response<Int>) {
+                    Log.i("recipeUpdSuccess", "recipe is updated")
+                }
+
+            })
+    }
+
+    fun postRecipe(recipe: DetailRecipeObject) {
+        val x =recipesApiService.updateRecipe(recipe.id!!, recipe).enqueue(object :  retrofit2.Callback<Int> {
+            override fun onFailure(call: Call<Int>, t: Throwable) {
+                Log.i("recipeUpdError", "recipe is not updated")
+            }
+
+            override fun onResponse(call: Call<Int>, response: Response<Int>) {
+                Log.i("recipeUpdSuccess", "recipe is updated")
+            }
+
+        })
     }
 
 }

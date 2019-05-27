@@ -2,8 +2,11 @@ package cz.ackee.cookbook.localDatabase
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import cz.ackee.cookbook.models.DetailRecipeObject
 import cz.ackee.cookbook.models.RecipesObject
+import cz.ackee.cookbook.network.BoundaryCallback
 import cz.ackee.cookbook.network.NetworkRecipeDataSource
 import cz.ackee.cookbook.network.NoConnectivityException
 import kotlinx.coroutines.*
@@ -20,10 +23,10 @@ class Repository(var networkDataSource: NetworkRecipeDataSource,
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     // The internal MutableLiveData String that stores the status of the most recent request
-    private val _responseList = MutableLiveData<List<RecipesObject>>()
+    //private val _responseList = MutableLiveData<PagedList<RecipesObject>>()
     // The external immutable LiveData for the request status String
-    val responseList: LiveData<List<RecipesObject>>
-        get() = _responseList
+   lateinit var responseList: LiveData<PagedList<RecipesObject>>
+
 
     // The internal MutableLiveData String that stores the status of the most recent request
     private val _isInitialised = MutableLiveData<Boolean>()
@@ -33,44 +36,32 @@ class Repository(var networkDataSource: NetworkRecipeDataSource,
 
     lateinit var recipeRequested: DetailRecipeObject
 
-    init {
-        _isInitialised.value = false
-        try {
-            coroutineScope.launch {
-                getCurrentRecipes()
-            }
-        }catch (e: NullPointerException) {
-            Log.i("null", e.message)
-        }catch (e: Exception){
-            Log.i("null", e.message)
 
-        }
+      fun getLocalData() {
+
+              val dataSourceFactory = getAllRecipesDao.getAllRecipes()
+              val boundaryCallback = BoundaryCallback(networkDataSource.recipesApiService) { recipeslocal ->
+                    Log.i("iamcalled", "myrecipes")
+                  GlobalScope.launch {
+                      withContext(Dispatchers.IO) {
+                          cacheRecipes(recipeslocal)
+                      }
+                  }
+
+              }
+              // Get the paged list
+          responseList = LivePagedListBuilder(dataSourceFactory, 20)
+                      .setBoundaryCallback(boundaryCallback)
+                      .build()
     }
 
-
-     suspend fun getCurrentRecipes() {
-         getLocalData()
-          try {
-             _responseList.value = networkDataSource.getAllRecipes()
-         }catch (e: NoConnectivityException){
-              Log.i("NOINTERNET", "stay with the local")
-         }
-    }
-
-    private  fun getLocalData() {
-        getAllRecipesDao.getAllRecipes().observeForever{
-            _responseList.value = it
-        }
-    }
-
-     fun cacheRecipes( recipes: List<RecipesObject>){
+       suspend fun cacheRecipes( recipes: List<RecipesObject>){
          GlobalScope.launch {
               withContext(Dispatchers.IO){
                  getAllRecipesDao.insertAll(recipes)
 
              }
          }
-
     }
 
     fun getTheRecipeDetails(recipeId: String) {
@@ -95,7 +86,7 @@ class Repository(var networkDataSource: NetworkRecipeDataSource,
         try {
             GlobalScope.launch {
                 withContext(Dispatchers.IO){
-                    networkDataSource.updateRecipe(recipe)
+                    networkDataSource.updateScore(recipe)
                 }
             }
         }catch (e: Exception){
