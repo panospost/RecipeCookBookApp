@@ -12,4 +12,4 @@ app has the 3 screens, list of recipes, update recipe score, and add new recipe.
 <li>better visual and devices screen support</li>
 <li>complete functionality (the app cannot add new recipes) </li>
 <li>plus the add new recipe screen ui is not finished</li>
-<li>\unit testing</li>
+<li>unit testing</li>
