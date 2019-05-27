@@ -13,6 +13,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import cz.ackee.cookbook.R
 import cz.ackee.cookbook.databinding.AddFragmentLayoutBinding
+import cz.ackee.cookbook.network.NetworkRecipeDataSource
+import cz.ackee.cookbook.network.RecipesApiService
 
 
 class AddFragmentScreen: Fragment() {
@@ -26,10 +28,15 @@ class AddFragmentScreen: Fragment() {
                 inflater, R.layout.add_fragment_layout, container, false)
         activity?.actionBar?.setDisplayShowHomeEnabled(true)
 
-         viewModel =  ViewModelProviders.of(this).get(AddFragmentViewModel::class.java)
+        val viewModelFactory = AddViewModelFactory(NetworkRecipeDataSource(RecipesApiService(activity!!.applicationContext)))
+
+        viewModel =
+                ViewModelProviders.of(
+                        this, viewModelFactory).get(AddFragmentViewModel::class.java)
+
+
         binding.viewmodel = viewModel
         viewModel.requestResult.observe(viewLifecycleOwner, Observer { result->
-            Log.i("response11", result)
             if(result == "OK"){
                 this.findNavController().navigate(R.id.action_addFragmentScreen_to_listCookBookFragment)
             }

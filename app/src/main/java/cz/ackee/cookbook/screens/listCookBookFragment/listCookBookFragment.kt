@@ -31,11 +31,12 @@ class ListCookBookFragment : Fragment() {
         val binding: LayoutListCookBookFragmentBinding = DataBindingUtil.inflate(
                 inflater, R.layout.layout_list_cook_book_fragment, container, false)
 
+
+        //dependency injection needed
                val database = RecipesLocalDatabase
         recipesApiService = RecipesApiService(activity!!.applicationContext)
         networkRecipeDataSource = NetworkRecipeDataSource(recipesApiService)
         repository = Repository(networkRecipeDataSource, database.getInstance(activity!!.applicationContext).getAllRecipesDao)
-
 
         val viewModelFactory = ListCookViewModelFactory(repository)
 
@@ -51,10 +52,10 @@ class ListCookBookFragment : Fragment() {
 
         binding.recipesList.adapter = adapter
         binding.recipesList.addItemDecoration(DividerItemDecoration(activity, LinearLayoutManager.VERTICAL))
+
         viewModel.responseList.observe(viewLifecycleOwner, Observer { it ->
             it?.let {
                 adapter.submitList(it)
-                viewModel.saveRecipes(it)
             }
         })
 
