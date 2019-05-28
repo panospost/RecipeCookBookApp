@@ -69,8 +69,8 @@ dependencies {
     // Retrofit Coroutines Support
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$version_retrofit_coroutines_adapter"
 
-    def paging_version = "2.1.0"
-
     implementation "androidx.paging:paging-runtime:$paging_version"
+
+    implementation "android.arch.work:work-runtime-ktx:$version_work"
 
 }
