@@ -48,7 +48,7 @@ class ListAdapterCookBook( val clickListener: ItemListListener) : PagedListAdapt
 
 class RecipesDiffUtill : DiffUtil.ItemCallback<RecipesObject>() {
     override fun areItemsTheSame(oldItem: RecipesObject, newItem: RecipesObject): Boolean {
-        return oldItem.id == newItem.id
+        return oldItem.id === newItem.id
     }
 
     override fun areContentsTheSame(oldItem: RecipesObject, newItem: RecipesObject): Boolean {
