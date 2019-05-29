@@ -4,12 +4,15 @@ package cz.ackee.cookbook.network
 
 import android.util.Log
 import cz.ackee.cookbook.models.DetailRecipeObject
+import dagger.Module
 import retrofit2.Call
 import retrofit2.Response
-import javax.security.auth.callback.Callback
+import javax.inject.Inject
 
-
-class NetworkRecipeDataSource(var recipesApiService: RecipesApiService) {
+@Module
+class NetworkRecipeDataSource @Inject constructor() {
+    @Inject
+    lateinit var recipesApiService: RecipesApiService
 
 
     suspend fun getRecipeDetails(recipeId: String): DetailRecipeObject {

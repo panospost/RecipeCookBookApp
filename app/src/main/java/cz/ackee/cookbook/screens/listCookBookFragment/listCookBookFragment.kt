@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import cz.ackee.cookbook.App
 import cz.ackee.cookbook.R
 import cz.ackee.cookbook.databinding.LayoutListCookBookFragmentBinding
 import cz.ackee.cookbook.localDatabase.GetAllRecipesDao
@@ -16,27 +17,23 @@ import cz.ackee.cookbook.localDatabase.RecipesLocalDatabase
 import cz.ackee.cookbook.localDatabase.Repository
 import cz.ackee.cookbook.network.NetworkRecipeDataSource
 import cz.ackee.cookbook.network.RecipesApiService
+import javax.inject.Inject
 
 class ListCookBookFragment : Fragment() {
 
     lateinit var viewModel: ListCookBookViewModel
-    lateinit var recipesApiService: RecipesApiService
-    lateinit var networkRecipeDataSource: NetworkRecipeDataSource
 
+    @Inject
     lateinit var repository: Repository
+
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Get a reference to the binding object and inflate the fragment views.
         val binding: LayoutListCookBookFragmentBinding = DataBindingUtil.inflate(
                 inflater, R.layout.layout_list_cook_book_fragment, container, false)
-
-
-        //dependency injection needed
-               val database = RecipesLocalDatabase
-        recipesApiService = RecipesApiService(activity!!.applicationContext)
-        networkRecipeDataSource = NetworkRecipeDataSource(recipesApiService)
-        repository = Repository(networkRecipeDataSource, database.getInstance(activity!!.applicationContext).getAllRecipesDao)
+          App.allComponent.inject(this)
 
         val viewModelFactory = ListCookViewModelFactory(repository)
 

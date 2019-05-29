@@ -4,6 +4,7 @@ import androidx.paging.DataSource
 import androidx.room.*
 import cz.ackee.cookbook.models.RecipesObject
 
+
 @Dao
 interface GetAllRecipesDao{
 
