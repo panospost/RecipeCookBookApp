@@ -18,6 +18,7 @@ buildscript {
         version_recyclerview = "1.0.0"
         paging_version = "2.1.0"
         version_work = "1.0.0-alpha11"
+        version_dagger = "2.20"
     }
     repositories {
         jcenter()

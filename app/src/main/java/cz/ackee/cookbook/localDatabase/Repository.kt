@@ -9,15 +9,15 @@ import cz.ackee.cookbook.models.RecipesObject
 import cz.ackee.cookbook.network.BoundaryCallback
 import cz.ackee.cookbook.network.NetworkRecipeDataSource
 import cz.ackee.cookbook.network.NoConnectivityException
+import dagger.Module
 import kotlinx.coroutines.*
 import java.lang.Exception
 import java.lang.NullPointerException
 import org.json.JSONObject
+import javax.inject.Inject
 
-
-
-class Repository(var networkDataSource: NetworkRecipeDataSource,
-                 var getAllRecipesDao: GetAllRecipesDao) {
+@Module
+class Repository @Inject constructor(var networkDataSource: NetworkRecipeDataSource, var localDB: GetAllRecipesDao) {
 
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.Main)
@@ -39,7 +39,7 @@ class Repository(var networkDataSource: NetworkRecipeDataSource,
 
       fun getLocalData() {
 
-              val dataSourceFactory = getAllRecipesDao.getAllRecipes()
+              val dataSourceFactory = localDB.getAllRecipes()
               val boundaryCallback = BoundaryCallback(networkDataSource.recipesApiService) { recipeslocal ->
                     Log.i("iamcalled", "myrecipes")
                   GlobalScope.launch {
@@ -58,7 +58,7 @@ class Repository(var networkDataSource: NetworkRecipeDataSource,
        suspend fun cacheRecipes( recipes: List<RecipesObject>){
          GlobalScope.launch {
               withContext(Dispatchers.IO){
-                 getAllRecipesDao.insertAll(recipes)
+                  localDB.insertAll(recipes)
 
              }
          }

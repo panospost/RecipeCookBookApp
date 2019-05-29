@@ -7,6 +7,7 @@ import cz.ackee.cookbook.localDatabase.RecipesLocalDatabase
 import cz.ackee.cookbook.localDatabase.Repository
 import cz.ackee.cookbook.network.NetworkRecipeDataSource
 import cz.ackee.cookbook.network.RecipesApiService
+import cz.ackee.cookbook.network.RetrofitObject
 import retrofit2.HttpException
 
 class BackGroundWorker(var appContext: Context, params: WorkerParameters):
@@ -18,16 +19,17 @@ class BackGroundWorker(var appContext: Context, params: WorkerParameters):
 
     override suspend fun doWork(): Payload {
 
-        val recipesApiService = RecipesApiService(appContext)
-       val networkRecipeDataSource = NetworkRecipeDataSource(recipesApiService)
-        val repository = Repository(networkRecipeDataSource, RecipesLocalDatabase.getInstance(appContext).getAllRecipesDao)
-
-        return try {
-            repository.getLocalData()
-            Payload(Result.SUCCESS)
-        } catch (e: HttpException) {
-            Payload(Result.RETRY)
-        }
+//        val recipesApiService = RetrofitObject(appContext)
+//       val networkRecipeDataSource = NetworkRecipeDataSource(recipesApiService)
+//        val repository = Repository(networkRecipeDataSource, RecipesLocalDatabase.getInstance(appContext).getAllRecipesDao)
+//
+//        return try {
+//            repository.getLocalData()
+//            Payload(Result.SUCCESS)
+//        } catch (e: HttpException) {
+//            Payload(Result.RETRY)
+//        }
+        return Payload(Result.SUCCESS)
     }
 
 }

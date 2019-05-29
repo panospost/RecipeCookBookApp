@@ -8,6 +8,8 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import cz.ackee.cookbook.models.RecipesObject
 import cz.ackee.cookbook.models.DetailRecipeObject
+import dagger.Module
+import dagger.Provides
 import kotlinx.coroutines.Deferred
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -16,6 +18,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Singleton
 
 
 private const val BASE_URL = "https://cookbook.ack.ee/api/v1/"
@@ -29,7 +32,7 @@ fun getRecipes(
         onError: (error: String) -> Unit
 ) {
 
-    service.getAllRecipes( limit, offset).enqueue(
+    service.getAllRecipes(limit, offset).enqueue(
             object : Callback<List<RecipesObject>> {
                 override fun onFailure(call: Call<List<RecipesObject>>, t: Throwable) {
                     onError(t.message ?: "unknown error")
@@ -44,7 +47,7 @@ fun getRecipes(
                         val recipes = response.body()
                         onSuccess(recipes)
                     } else {
-                        Log.i("error",response.errorBody()?.string() )
+                        Log.i("error", response.errorBody()?.string())
                         onError(response.errorBody()?.string() ?: "Unknown error")
                     }
                 }
@@ -52,7 +55,7 @@ fun getRecipes(
     )
 }
 
-
+@Module
 interface RecipesApiService {
     @GET("recipes")
     fun getAllRecipes(
@@ -75,33 +78,37 @@ interface RecipesApiService {
     fun updateScoreRecipe(@Path("recipeId") id: String, @Body score: Int)
             : Call<Int>
 
-    companion object {
-        operator fun invoke(
-                context: Context
-        ): RecipesApiService {
-            /**
-             * Build the Moshi object that Retrofit will be using,
-             */
-            val moshi = Moshi.Builder()
-                    .add(KotlinJsonAdapterFactory())
-                    .build()
 
-            val client = OkHttpClient.Builder()
-                    .addInterceptor(ConnectivityInterceptor(context))
-                    .build()
+}
+@Module
+class RetrofitObject{
 
-            /**
-             * Use the Retrofit builder to build a retrofit object using a Moshi converter with our Moshi
-             * object.
-             */
-            return  Retrofit.Builder()
-                    .client(client)
-                    .addConverterFactory(MoshiConverterFactory.create(moshi))
-                    .addCallAdapterFactory(CoroutineCallAdapterFactory())
-                    .baseUrl(BASE_URL)
-                    .build()
-                    .create(RecipesApiService::class.java)
-        }
+    @Singleton
+    @Provides
+    fun invoke(
+            context: Context
+    ): RecipesApiService {
+        /**
+         * Build the Moshi object that Retrofit will be using,
+         */
+        val moshi = Moshi.Builder()
+                .add(KotlinJsonAdapterFactory())
+                .build()
+
+        val client = OkHttpClient.Builder()
+                .addInterceptor(ConnectivityInterceptor(context))
+                .build()
+
+        /**
+         * Use the Retrofit builder to build a retrofit object using a Moshi converter with our Moshi
+         * object.
+         */
+        return Retrofit.Builder()
+                .client(client)
+                .addConverterFactory(MoshiConverterFactory.create(moshi))
+                .addCallAdapterFactory(CoroutineCallAdapterFactory())
+                .baseUrl(BASE_URL)
+                .build()
+                .create(RecipesApiService::class.java)
     }
 }
-
