@@ -8,7 +8,6 @@ app has the 3 screens, list of recipes, update recipe score, and add new recipe.
 
 
 </ul>
-<li>Dagger or dependency injection ot be implemented</li>
 <li>better visual and devices screen support</li>
 <li>complete functionality (the app cannot add new recipes) </li>
 <li>plus the add new recipe screen ui is not finished</li>
